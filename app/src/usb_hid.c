@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <device.h>
-#include <init.h>
+#include <zephyr/device.h>
+#include <zephyr/init.h>
 
-#include <usb/usb_device.h>
-#include <usb/class/usb_hid.h>
+#include <zephyr/usb/usb_device.h>
+#include <zephyr/usb/class/usb_hid.h>
 
 #include <zmk/usb.h>
 #include <zmk/hid.h>
@@ -48,7 +48,7 @@ int zmk_usb_hid_send_report(const uint8_t *report, size_t len) {
     }
 }
 
-static int zmk_usb_hid_init(const struct device *_arg) {
+static int zmk_usb_hid_init(void) {
     hid_dev = device_get_binding("HID_0");
     if (hid_dev == NULL) {
         LOG_ERR("Unable to locate HID device");

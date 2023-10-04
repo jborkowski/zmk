@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <init.h>
-#include <settings/settings.h>
+#include <zephyr/init.h>
+#include <zephyr/settings/settings.h>
 
 #include <zmk/ble.h>
 #include <zmk/endpoints.h>
@@ -18,7 +18,7 @@
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/events/endpoint_selection_changed.h>
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #define DEFAULT_ENDPOINT                                                                           \
@@ -182,7 +182,7 @@ int zmk_endpoints_send_mouse_report() {
 
 static int endpoints_handle_set(const char *name, size_t len, settings_read_cb read_cb,
                                 void *cb_arg) {
-    LOG_DBG("Setting endpoint value %s", log_strdup(name));
+    LOG_DBG("Setting endpoint value %s", name);
 
     if (settings_name_steq(name, "preferred", NULL)) {
         if (len != sizeof(enum zmk_endpoint)) {
@@ -205,7 +205,7 @@ static int endpoints_handle_set(const char *name, size_t len, settings_read_cb r
 struct settings_handler endpoints_handler = {.name = "endpoints", .h_set = endpoints_handle_set};
 #endif /* IS_ENABLED(CONFIG_SETTINGS) */
 
-static int zmk_endpoints_init(const struct device *_arg) {
+static int zmk_endpoints_init(void) {
 #if IS_ENABLED(CONFIG_SETTINGS)
     settings_subsys_init();
 

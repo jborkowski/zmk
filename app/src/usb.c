@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <device.h>
-#include <init.h>
+#include <zephyr/device.h>
+#include <zephyr/init.h>
 
-#include <usb/usb_device.h>
-#include <usb/class/usb_hid.h>
+#include <zephyr/usb/usb_device.h>
+#include <zephyr/usb/class/usb_hid.h>
 
 #include <zmk/hid.h>
 #include <zmk/keymap.h>
@@ -33,6 +33,8 @@ enum zmk_usb_conn_state zmk_usb_get_conn_state() {
     switch (usb_status) {
     case USB_DC_SUSPEND:
     case USB_DC_CONFIGURED:
+    case USB_DC_RESUME:
+    case USB_DC_CLEAR_HALT:
         return ZMK_USB_CONN_HID;
 
     case USB_DC_DISCONNECTED:
@@ -49,7 +51,7 @@ void usb_status_cb(enum usb_dc_status_code status, const uint8_t *params) {
     k_work_submit(&usb_status_notifier_work);
 };
 
-static int zmk_usb_init(const struct device *_arg) {
+static int zmk_usb_init(void) {
     int usb_enable_ret;
 
     usb_enable_ret = usb_enable(usb_status_cb);

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <device.h>
-#include <init.h>
-#include <kernel.h>
+#include <zephyr/device.h>
+#include <zephyr/init.h>
+#include <zephyr/kernel.h>
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -72,7 +72,7 @@ void wpm_expiry_function() { k_work_submit(&wpm_work); }
 
 K_TIMER_DEFINE(wpm_timer, wpm_expiry_function, NULL);
 
-int wpm_init() {
+static int wpm_init(void) {
     wpm_state = 0;
     wpm_update_counter = 0;
     k_timer_start(&wpm_timer, K_SECONDS(WPM_UPDATE_INTERVAL_SECONDS),
